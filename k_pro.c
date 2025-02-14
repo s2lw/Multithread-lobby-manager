@@ -356,7 +356,7 @@ void *lobby_thread(void *arg) {
         lobby->board[tr][tc] = lobby->board[fr][fc];
         lobby->board[fr][fc] = 0;
 
-        // Usuń zbity pionek
+        // Usuwanie zbitego pionka
         if (jr != -1) {
             lobby->board[jr][jc] = 0;
         }
