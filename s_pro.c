@@ -278,7 +278,7 @@ int check_win(Lobby *lobby, int active_player) {
 }
 
 
-// game of cart functions
+// end of game functions
 
 void *lobby_thread(void *arg) {
     Lobby *lobby = (Lobby *)arg;
