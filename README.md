@@ -2,9 +2,9 @@
 
 A scalable TCP-based game server that supports up to 99 concurrent games of checkers between player pairs.
 
-## Overview
+## Summary
 
-This project consists of a server and client implementation for a networked checkers game. The system provides a robust multi-lobby environment where players can connect and automatically join available game lobbies. Each lobby handles a single game between two players, with the server managing lobby assignments, game state, and player synchronization.
+This project consists of a server and client implementation for a networked checkers game. The system provides a multi-lobby environment where players can connect and automatically join available game lobbies. Each lobby handles a single game between two players, with the server managing lobby assignments, game state, and player synchronization.
 
 ## Key Features
 
