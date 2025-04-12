@@ -40,10 +40,18 @@ int recv_with_length(int socket, char *buffer, int buffer_size) {
     return received;  
 }
 
+void client_cleanup(int signal) {
+    printf("\nZamykam połączenie...\n");
+    close(client_socket);
+    exit(0);
+}
 
+int client_socket;
 int main() {
+    signal(SIGINT, client_cleanup);
+    signal(SIGTERM, client_cleanup);
     setvbuf(stdout, NULL, _IONBF, 0);  // Wyłączenie buforowania dla stdout
-    int client_socket;
+    
     struct sockaddr_in server_addr;
     char message[BUFFER_SIZE];
     char buffer[BUFFER_SIZE];
