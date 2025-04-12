@@ -398,6 +398,28 @@ void *lobby_thread(void *arg) {
     return NULL;
 }
 
+void cleanup_and_exit(int signal) {
+    printf("\nShutting down server...\n");
+    
+    for (int i = 0; i < MAX_LOBBIES; i++) {
+        pthread_mutex_lock(&lobbies[i].lock);
+        for (int j = 0; j < NUM_PLAYERS; j++) {
+            if (lobbies[i].player_sockets[j] > 0) {
+                send_with_length(lobbies[i].player_sockets[j], "Server shutting down");
+                close(lobbies[i].player_sockets[j]);
+            }
+        }
+        pthread_mutex_unlock(&lobbies[i].lock);
+        pthread_mutex_destroy(&lobbies[i].lock);
+    }
+    
+    pthread_mutex_destroy(&lobby_lock);
+    
+    close(server_socket);
+    
+    exit(0);
+}
+
 
 int join_lobby(int client_socket) {
     pthread_mutex_lock(&lobby_lock);
@@ -467,12 +489,14 @@ void *handle_client(void *arg) {
     close(client_socket);
     return NULL;
 }
-
+int server_socket;
 int main() {
+    signal(SIGINT, cleanup_and_exit);
+    signal(SIGTERM, cleanup_and_exit);
     signal(SIGPIPE, SIG_IGN); // serwer nie wyłącza się, gdy klient rozłączy się nagle
     setvbuf(stdout, NULL, _IONBF, 0);  // Wyłączenie buforowania dla stdout
     init_lobbies();
-    int server_socket, *new_socket;
+    int  *new_socket;
     struct sockaddr_in server_addr;
     struct sockaddr_storage server_storage;
     socklen_t addr_size;
